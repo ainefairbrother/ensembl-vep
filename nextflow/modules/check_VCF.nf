@@ -9,20 +9,22 @@ import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
 
 def checkVCFheader (f) {
+  def fname = f.toString()
+
   // Check file extension
-  if (!(f ==~ /.*\.vcf$/) && !(f ==~ /.*\.vcf\.b?gz$/)) {
+  if (!(fname ==~ /.*\.vcf$/) && !(fname ==~ /.*\.vcf\.b?gz$/)) {
     return false
   }
 
   // Read lines (compressed or not)
   List<String> lines
-  if (f ==~ /.*\.b?gz$/) {
-    def br = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(f))))
+  if (fname ==~ /.*\.b?gz$/) {
+    def br = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(fname))))
     lines = []
     for (def L = br.readLine(); L != null; L = br.readLine()) { lines << L }
     br.close()
   } else {
-    lines = new File(f).readLines()
+    lines = new File(fname).readLines()
   }
 
   // Check file header
