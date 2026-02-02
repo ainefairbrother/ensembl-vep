@@ -34,7 +34,12 @@ process splitVCF {
   index_flag = index_type == "tbi" ? "-t" : "-c"
   
   """
-  bcftools view --no-version -T ${split_file} -Oz ${vcf} > ${prefix}.${split_file}.vcf.gz
+  input_vcf="${vcf}"
+  if ! bgzip -t ${vcf} >/dev/null 2>&1; then
+    bcftools view -Oz -o fixed.vcf.gz ${vcf}
+    input_vcf="fixed.vcf.gz"
+  fi
+  bcftools view --no-version -T ${split_file} -Oz ${input_vcf} > ${prefix}.${split_file}.vcf.gz
   bcftools index ${index_flag} ${prefix}.${split_file}.vcf.gz
   """
 }
