@@ -39,7 +39,7 @@ process splitVCF {
     bcftools view -Oz -o fixed.vcf.gz ${vcf}
     input_vcf="fixed.vcf.gz"
   fi
-  bcftools view --no-version -T ${split_file} -Oz ${input_vcf} > ${prefix}.${split_file}.vcf.gz
+  bcftools view --no-version -T ${split_file} -Oz \${input_vcf} > ${prefix}.${split_file}.vcf.gz
   bcftools index ${index_flag} ${prefix}.${split_file}.vcf.gz
   """
 }
